@@ -6,6 +6,11 @@ Security settings are strictly enforced.
 """
 
 from .base import *
+from .security import *  # Import security settings
+
+# Validate environment on startup (optional, can be disabled after initial setup)
+# from ..env_validator import validate_environment
+# validate_environment('production')
 
 # =============================================================================
 # Debug Settings
@@ -40,13 +45,22 @@ SECURE_HSTS_PRELOAD = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'  # Control referrer information
 
 # =============================================================================
 # Database Configuration
 # =============================================================================
 
-# Ensure database connection persistence
-DATABASES['default']['CONN_MAX_AGE'] = 60
+# Connection pooling for better performance
+# CONN_MAX_AGE: persistent connections in seconds
+DATABASES['default']['CONN_MAX_AGE'] = 600  # 10 minutes
+
+# Connection pooling settings (for mysqlclient)
+DATABASES['default']['OPTIONS']['init_command'] += ";SET SESSION wait_timeout=600;SET SESSION interactive_timeout=600"
+
+# Additional database optimizations
+DATABASES['default']['OPTIONS']['charset'] = 'utf8mb4'
+DATABASES['default']['OPTIONS']['sql_mode'] = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'
 
 # =============================================================================
 # CORS Settings - Restrictive for production
