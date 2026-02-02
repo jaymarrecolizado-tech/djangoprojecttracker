@@ -32,6 +32,7 @@ urlpatterns = [
     path(f'{API_PREFIX}/import/', include('apps.import_export.urls')),
     path(f'{API_PREFIX}/reports/', include('apps.reports.urls')),
     path(f'{API_PREFIX}/audit/', include('apps.audit.urls')),
+    path(f'{API_PREFIX}/notifications/', include('apps.notifications.urls')),
 ]
 
 # Serve media files in development
