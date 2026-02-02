@@ -77,7 +77,7 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         ordering = ['-date_joined']
-        db_table = 'auth_user'
+        db_table = 'users'
 
     def __str__(self) -> str:
         """Return string representation of the user."""

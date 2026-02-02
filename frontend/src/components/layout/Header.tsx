@@ -1,7 +1,8 @@
-import { Bell, Menu, User } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { useAuthStore } from '@/stores/auth'
-import { Button } from '@/components/ui/button'
+import { Bell, Menu, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/stores/auth';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +10,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Sidebar } from './Sidebar'
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sidebar } from './Sidebar';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 
 export function Header() {
-  const { user, logout } = useAuthStore()
+  const { user } = useAuthStore();
+  const { logout, isLoggingOut } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout()
-    window.location.href = '/login'
-  }
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   const getInitials = (name: string) => {
     return name
@@ -28,8 +32,8 @@ export function Header() {
       .map((n) => n[0])
       .join('')
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
   return (
     <header className="flex h-16 items-center border-b bg-background px-6">
@@ -50,11 +54,7 @@ export function Header() {
       </Link>
 
       <div className="ml-auto flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" />
-          <span className="sr-only">Notifications</span>
-        </Button>
+        <NotificationBell />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -77,10 +77,12 @@ export function Header() {
             <DropdownMenuItem asChild>
               <Link to="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
+              {isLoggingOut ? 'Logging out...' : 'Log out'}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }
