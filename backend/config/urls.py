@@ -26,13 +26,13 @@ urlpatterns = [
 
     # App URLs
     path(f'{API_PREFIX}/auth/', include('apps.accounts.urls')),
-    path(f'{API_PREFIX}/', include('apps.locations.urls')),
-    path(f'{API_PREFIX}/', include('apps.projects.urls')),
-    path(f'{API_PREFIX}/geo/', include('apps.geo.urls')),
-    path(f'{API_PREFIX}/import/', include('apps.import_export.urls')),
-    path(f'{API_PREFIX}/reports/', include('apps.reports.urls')),
+    # path(f'{API_PREFIX}/', include('apps.locations.urls')),  # Temporarily commented - requires GDAL
+    # path(f'{API_PREFIX}/', include('apps.projects.urls')),  # Temporarily commented - requires GDAL
+    # path(f'{API_PREFIX}/geo/', include('apps.geo.urls')),  # Temporarily commented - requires GDAL
+    # path(f'{API_PREFIX}/import/', include('apps.import_export.urls')),  # Temporarily commented - may depend on projects
+    # path(f'{API_PREFIX}/reports/', include('apps.reports.urls')),  # Temporarily commented - may depend on projects
     path(f'{API_PREFIX}/audit/', include('apps.audit.urls')),
-    path(f'{API_PREFIX}/notifications/', include('apps.notifications.urls')),
+    # path(f'{API_PREFIX}/notifications/', include('apps.notifications.urls')),  # Temporarily commented - imports projects models
 ]
 
 # Serve media files in development

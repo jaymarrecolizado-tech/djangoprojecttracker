@@ -34,7 +34,6 @@ from .serializers import (
 )
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginView:
     """
     API View for user login.

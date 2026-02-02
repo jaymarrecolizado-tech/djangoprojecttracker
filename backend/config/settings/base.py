@@ -9,6 +9,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Use pymysql as MySQL client (pure Python, no compilation required)
+import pymysql
+pymysql.install_as_MySQLdb()
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -36,12 +40,12 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',  # GeoDjango
+    # 'django.contrib.gis',  # GeoDjango - commented due to GDAL dependency
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'rest_framework_gis',
+    # 'rest_framework_gis',  # Temporarily commented - package not found
     'django_filters',
     'corsheaders',
     'drf_spectacular',
@@ -51,13 +55,13 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'apps.common',
     'apps.accounts',
-    'apps.locations',
-    'apps.projects',
-    'apps.geo',
-    'apps.import_export',
-    'apps.reports',
+    # 'apps.locations',  # Temporarily commented - requires GDAL
+    # 'apps.projects',  # Temporarily commented - requires GDAL
+    # 'apps.geo',  # Temporarily commented - requires GDAL
+    # 'apps.import_export',  # Temporarily commented - may depend on projects
+    # 'apps.reports',  # Temporarily commented - may depend on projects
     'apps.audit',
-    'apps.notifications',
+    # 'apps.notifications',  # Temporarily commented - imports projects models
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -118,14 +122,14 @@ ASGI_APPLICATION = 'config.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql',  # Changed from GIS backend
         'NAME': os.getenv('DB_NAME', 'project_tracking'),
         'USER': os.getenv('DB_USER', 'root'),
         'PASSWORD': os.getenv('DB_PASSWORD', ''),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
-            'charset': os.getenv('DB_CHARSET', 'utf8mb4'),
+            'charset': os.getenv('DB_CHARSET', 'utf8'),  # Changed to utf8 for better index key length support
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
